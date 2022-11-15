@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BrandController;
 use App\Models\User;
 use \Illuminate\Support\Facades\DB;
   
@@ -34,11 +35,22 @@ Route::get('/about', function () {
 
 Route::get('/contact', [ContactController::class, 'index'])->name('con');
 
-//category Controller
+//For category Controller
 Route::get('/category/all', [CategoryController::class, 'AllCat'])->name('all.category');
 Route::post('/category/add', [CategoryController::class, 'AddCat'])->name('store.category');
 
+Route::get('category/edit/{id}', [CategoryController::class, 'Edit']);
+Route::post('category/update/{id}', [CategoryController::class, 'update']);
 
+Route::get('softdelete/category/{id}', [CategoryController::class, 'SoftDelete']);
+Route::get('category/restor/{id}', [CategoryController::class, 'Restor']);
+Route::get('pdelete/category/{id}', [CategoryController::class, 'Pdelete']);
+
+//For Brand Controller
+Route::post('/brand/add', [BrandController::class, 'StoreBrand'])->name('store.brand');
+Route::get('/brand/all', [BrandController::class, 'AllBrand'])->name('all.brand');
+
+Route::get('/brand/edit/{id}', [BrandController::class, 'Edit']);
 
 
 Route::middleware([

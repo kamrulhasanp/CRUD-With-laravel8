@@ -12,18 +12,19 @@ class CategoryController extends Controller
 {
     public function AllCat(){
 
-        //$categories = Category::latest()->paginate(10);
+        $categories = Category::latest()->paginate(10);
+        $trashCat = Category::onlyTrashed()->latest()->paginate(5);
         //$categories = Category::latest()->get();
 
         //$categories = DB::table('categories')->latest()->get();
         //$categories = DB::table('categories')->latest()->paginate(10);
 
-        $categories = DB::table('categories')
-            ->join('users', 'categories.user_id', 'user_id' )
-            ->select('categories.*', 'users.name')
-            ->latest()->paginate(10);
+        // $categories = DB::table('categories')
+        //     ->join('users', 'categories.user_id', 'user_id' )
+        //     ->select('categories.*', 'users.name')
+        //     ->latest()->paginate(10);
 
-        return view('admin.category.index', compact('categories'));
+        return view('admin.category.index', compact('categories', 'trashCat'));
     }
 
     public function AddCat(Request $request){
@@ -59,9 +60,45 @@ class CategoryController extends Controller
         // DB::table('categories')->insert($data);
 
         return Redirect()->back()->with('success', 'Category Inserted Successfully');
-        //link for seach
-        // https://github.com/mbere250/Simple-search-with-pagination-in-laravel-8/blob/master/app/Http/Controllers/SearchController.php
+       
+    }
 
+    public function Edit($id){
+        // $categories = Category::find($id);
+        $categories =DB::table('categories')->where('id', $id)->first();
+        return view('admin.category.edit', compact('categories'));
+    }
+
+    public function update(Request $request, $id){
+        // $update = Category::find($id)->update([
+        //     'category_name'=> $request->category_name,
+        //     'user_id'=> Auth::user()->id
+
+        // ]);
+
+        $data = array();
+        $data['category_name'] =  $request->category_name;
+        $data['user_id'] = Auth::user()->id;
+        DB::table('categories')->where('id', $id)->update($data); 
+
+        return Redirect()->route('all.category')->with('success', 'Category Updates Successfully');
+       
+    }
+
+    public function SoftDelete($id){
+        $delete = Category::find($id)->delete();
+        return redirect()->back()->with('Success', 'Category Delete Successfully');
+    }
+
+    public function Restor($id){
+        $pdelete = Category::withTrashed()->find($id)->restore();
+        return redirect()->back()->with('Success', 'Category Restored Successfully');
+
+    }
+
+    public function Pdelete($id){
+        $delete = Category::onlyTrashed()->find($id)->forceDelete();
+        return redirect()->back()->with('Success', 'Category permanently Deleted Successfully');
 
     }
 }
