@@ -54,6 +54,8 @@ class BrandController extends Controller
             'created_at' =>Carbon::now()
         ]);
 
+      
+
         return Redirect()->back()->with('success', 'Brand Inserted Successfully');
     }
 

@@ -62,6 +62,16 @@
               </div>
             </div>
             <div class="card-body p-5">
+            @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>{{session('success')}}</strong>
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+
+            @endif
 
               <h4 class="text-dark mb-5">Sign In</h4>
               <form action="{{ route('login') }}" method="post">

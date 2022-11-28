@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ChangePassword;
 use App\Models\User;
 use App\Models\Multipic;
 use \Illuminate\Support\Facades\DB;
@@ -22,10 +23,6 @@ Route::get('/', function () {
     return view('home', compact('brands', 'abouts', 'portfolios') );
 });
 
-Route::get('/home', function () {
-   //return view('about');
-   echo "This is Home Page";
-});
 
 Route::get('/about', function () {
     return view('about');
@@ -80,7 +77,29 @@ Route::get('about/delete/{id}', [AboutController::class, 'Delete']);
 
 
 // Portfolio Page Route
-Route::get('portfollio', [AboutController::class, 'Portfollio'])->name('portfollio');
+Route::get('/portfollio', [AboutController::class, 'Portfollio'])->name('portfollio');
+
+//Admin Contact Route
+Route::get('/admin/contact', [ContactController::class, 'AdminContact'])->name('admin.contact');
+Route::get('/admin/add/contact', [ContactController::class, 'AddContact'])->name('add.contact');
+Route::post('/admin/store/contact', [ContactController::class, 'StoreContact'])->name('store.contact');
+Route::get('/admin/message', [ContactController::class, 'AdminMessage'])->name('admin.message');
+Route::get('message/delete/{id}', [ContactController::class, 'Delete']);
+
+
+//Home Contact Route
+Route::get('/contact', [ContactController::class, 'Contact'])->name('contact');
+Route::post('/contact/form', [ContactController::class, 'ContactForm'])->name('contact.form');
+
+// User profile and change Password
+Route::get('/user/password', [ChangePassword::class, 'ChangePass'])->name('change.password');
+Route::post('/pass/update', [ChangePassword::class, 'UpdatePass'])->name('password.update');
+
+// User profile 
+Route::get('/user/profile', [ChangePassword::class, 'profileUpdate'])->name('profile.update');
+Route::post('/user/update/', [ChangePassword::class, 'UserUpdate'])->name('user.profile.update');
+
+
 
 Route::middleware([
     'auth:sanctum',
